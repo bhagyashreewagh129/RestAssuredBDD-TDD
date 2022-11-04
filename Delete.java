@@ -1,24 +1,25 @@
-package stepDefination;
+package Operation;
 
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
-import static io.restassured.RestAssured.*;
-public class Delete {
-   Response res;
-   ValidatableResponse validate;
-   
-	@When("user want to delete user by using URI {string}")
-	public void user_want_to_delete_user_by_using_uri(String s1) {
-	   res=when().delete(s1);
-	}
+import static io.restassured.RestAssured.baseURI;
+import static io.restassured.RestAssured.when;
+import static org.hamcrest.Matchers.equalTo;
 
-	@Then("verify status code is {int}")
-	public void verify_status_code_is(Integer int1) {
-	  res.then()
-	  .log().all()
-	  .assertThat().statusCode(int1);
-	}
+import org.testng.annotations.Test;
 
+import basepackage.BaseClass;
+
+public class Delete extends BaseClass{
+   @Test
+   public void delete()
+   {
+	    baseURI="http://localhost:8080";
+		when()
+		.delete("/user?id=36")
+		
+		.then()
+		.assertThat().statusCode(200)
+		.assertThat().body("data", equalTo("User deleted"))
+		.log().all();
+		
+   }
 }
